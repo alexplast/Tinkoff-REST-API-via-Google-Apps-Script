@@ -6,12 +6,12 @@ TinkoffApp
 ## Ключ библиотеки
 
 ```
-M5z_atgWuk4VhZivu6JDRFQ2aCuwATz2_
+1uEtkgmmDPIQJ607pToZJX-0R2xa3g2hEw2Jx3KZmUni93T7FH2Vf4th1
 ```
 
 ## Версии
 
-[https://script.google.com/macros/library/versions/d/M5z_atgWuk4VhZivu6JDRFQ2aCuwATz2_](https://script.google.com/macros/library/versions/d/M5z_atgWuk4VhZivu6JDRFQ2aCuwATz2_)
+[https://script.google.com/macros/library/versions/d/1uEtkgmmDPIQJ607pToZJX-0R2xa3g2hEw2Jx3KZmUni93T7FH2Vf4th1](https://script.google.com/macros/library/versions/d/1uEtkgmmDPIQJ607pToZJX-0R2xa3g2hEw2Jx3KZmUni93T7FH2Vf4th1)
 
 ## Как использовать
 
