@@ -50,6 +50,6 @@ function tinkoffApi_(obj, token) {
             tmp_arr[i] = use_key + '=' + use_val;
             i++;
         }
-        return tmp_arr.join(arg_separator);
+        return tmp_arr.join(arg_separator).replace(/\+/gm, '%2B');
     }
 }
