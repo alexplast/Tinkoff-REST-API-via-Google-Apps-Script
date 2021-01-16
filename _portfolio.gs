@@ -2,7 +2,7 @@ class Portfolio { // Операции с портфелем пользовате
     constructor(token) {
         this.token = token;
     }
-    list(brokerAccountId) {
+    List(brokerAccountId) {
         var data = portfolio(this.token, brokerAccountId);
         function portfolio(token, brokerAccountId) { // Получение портфеля клиента
             var obj = {
