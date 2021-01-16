@@ -10,7 +10,9 @@ class Orders { // Операции заявок
                 path: 'orders'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
