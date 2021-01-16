@@ -25,7 +25,9 @@ class Sandbox { // Операция в sandbox
                 path: 'sandbox/currencies/balance'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
@@ -40,7 +42,9 @@ class Sandbox { // Операция в sandbox
                 path: 'sandbox/positions/balance'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
@@ -54,7 +58,9 @@ class Sandbox { // Операция в sandbox
                 path: 'sandbox/remove'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
@@ -68,7 +74,9 @@ class Sandbox { // Операция в sandbox
                 path: 'sandbox/clear'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
