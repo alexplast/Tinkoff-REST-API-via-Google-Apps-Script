@@ -15,9 +15,7 @@ class Operations { // Получении информации по операц�
                 path: 'operations'
             }
             if (!!brokerAccountId) {
-                obj.parametres = {
-                    brokerAccountId: brokerAccountId
-                };
+                obj.parametres.brokerAccountId = brokerAccountId;
             }
             return tinkoffApi_(obj, token);
         }
