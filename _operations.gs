@@ -2,17 +2,19 @@ class Operations { // Получении информации по операц�
     constructor(token) {
         this.token = token;
     }
-    list(from, to, figi, brokerAccountId) {
-        var data = userAccounts(this.token, from, to, figi, brokerAccountId);
+    List(from, to, figi, brokerAccountId) {
+        var data = operations(this.token, from, to, figi, brokerAccountId);
         function operations(token, from, to, figi, brokerAccountId) { // Получение списка операций
             var obj = {
                 parametres: {
                     from: from,
                     to: to,
-                    figi: figi
                 },
                 method: 'GET',
                 path: 'operations'
+            }
+            if ((!!figi) && (figi != null)) {
+                obj.parametres.figi = figi;
             }
             if (!!brokerAccountId) {
                 obj.parametres.brokerAccountId = brokerAccountId;
