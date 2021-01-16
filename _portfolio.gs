@@ -10,7 +10,9 @@ class Portfolio { // Операции с портфелем пользовате
                 path: 'portfolio'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
@@ -24,7 +26,9 @@ class Portfolio { // Операции с портфелем пользовате
                 path: 'portfolio/currencies'
             }
             if (!!brokerAccountId) {
-                obj.parametres.brokerAccountId = brokerAccountId;
+                obj.parametres = {
+                    brokerAccountId: brokerAccountId
+                };
             }
             return tinkoffApi_(obj, token);
         }
