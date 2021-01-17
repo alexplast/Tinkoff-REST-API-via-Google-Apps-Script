@@ -46,40 +46,41 @@ function myFunction() {
 #### Методы
 
 sandbox
-
-- .sandboxRegister() - Регистрация клиента в sandbox
-- .sandboxCurrenciesBalance(request, brokerAccountId) - Выставление баланса по валютным позициям
-- .sandboxPositionsBalance(request, brokerAccountId) - Выставление баланса по инструментным позициям
-- .sandboxRemove(brokerAccountId) - Удаление счета
-- .sandboxClear(brokerAccountId) - Удаление всех позиций
-          
+```javascript
+- .sandboxRegister() // Регистрация клиента в sandbox
+- .sandboxCurrenciesBalance(request, brokerAccountId) // Выставление баланса по валютным позициям
+- .sandboxPositionsBalance(request, brokerAccountId) // Выставление баланса по инструментным позициям
+- .sandboxRemove(brokerAccountId) // Удаление счета
+- .sandboxClear(brokerAccountId) // Удаление всех позиций
+```
 orders
-
-- .orders(brokerAccountId) - Получение списка активных заявок
-- .ordersLimitOrder(request, figi, brokerAccountId) - Создание лимитной заявки
-- .ordersMarketOrder(request, figi, brokerAccountId) - Создание рыночной заявки
-- .ordersCancel(orderId, brokerAccountId) - Отмена заявки
-
+```javascript
+- .orders(brokerAccountId) // Получение списка активных заявок
+- .ordersLimitOrder(request, figi, brokerAccountId) // Создание лимитной заявки
+- .ordersMarketOrder(request, figi, brokerAccountId) // Создание рыночной заявки
+- .ordersCancel(orderId, brokerAccountId) // Отмена заявки
+```
 portfolio
-
-- .portfolio(brokerAccountId) - Получение портфеля клиента
-- .portfolioCurrencies(brokerAccountId) - Получение валютных активов клиента
-
+```javascript
+- .portfolio(brokerAccountId) // Получение портфеля клиента
+- .portfolioCurrencies(brokerAccountId) // Получение валютных активов клиента
+```
 market
-
-- .marketStocks() - Получение списка акций
-- .marketBonds() - Получение списка облигаций
-- .marketEtfs() - Получение списка ETF
-- .marketCurrencies() - Получение списка валютных пар
-- .marketOrderbook(figi, depth) - Получение стакана по FIGI
-- .marketCandles(figi, from, to, interval) - Получение исторических свечей по FIGI
-- .marketSearchByFigi(figi) - Получение инструмента по FIGI
-- .marketSearchByTicker(ticker) - Получение инструмента по тикеру
-
+```javascript
+- .marketStocks() // Получение списка акций
+- .marketBonds() // Получение списка облигаций
+- .marketEtfs() // Получение списка ETF
+- .marketCurrencies() // Получение списка валютных пар
+- .marketOrderbook(figi, depth) // Получение стакана по FIGI
+- .marketCandles(figi, from, to, interval) // Получение исторических свечей по FIGI
+- .marketSearchByFigi(figi) // Получение инструмента по FIGI
+- .marketSearchByTicker(ticker) // Получение инструмента по тикеру
+```
 operations
-
-- .operations(from, to, figi, brokerAccountId) - Получение списка операций
-
+```javascript
+- .operations(from, to, figi, brokerAccountId) // Получение списка операций
+```
 user
-
-- .userAccounts() - Получение брокерских счетов клиента
+```javascript
+- .userAccounts() // Получение брокерских счетов клиента
+```
