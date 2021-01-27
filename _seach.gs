@@ -5,6 +5,9 @@ class Search { // Поиск
   ByFIGI(figi) {
     var data = marketSearchByFIGI(this.token, figi);
     function marketSearchByFIGI(token, figi) { // Получение инструмента по FIGI
+      if ((figi == undefined) || (figi == null)) {
+        throw new Error('Не указан обязательный параметр "figi"');
+      }
       var obj = {
         parametres: {
           figi: figi
@@ -19,6 +22,9 @@ class Search { // Поиск
   ByTicker(ticker) {
     var data = marketSearchByTicker(this.token, ticker);
     function marketSearchByTicker(token, ticker) { // Получение инструмента по тикеру
+      if ((ticker == undefined) || (ticker == null)) {
+        throw new Error('Не указан обязательный параметр "ticker"');
+      }
       var obj = {
         parametres: {
           ticker: ticker
