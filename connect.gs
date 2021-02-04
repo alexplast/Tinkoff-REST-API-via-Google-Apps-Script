@@ -22,10 +22,16 @@ function tinkoffApi_(obj, token) {
       if (obj.data) {
         options.payload = JSON.stringify(obj.data);
       }
-      // Logger.log(fullUrl);
-      // Logger.log(JSON.stringify(options));
       var response = UrlFetchApp.fetch(fullUrl, options);
-      // Logger.log(response);
+      if (!!options_.logging) {
+        if (options_.logging == true) {
+          Logger.log('Request:');
+          Logger.log(`url -> ${fullUrl}`);
+          Logger.log(`data -> ${JSON.stringify(options)}`);
+          Logger.log('Response:');
+          Logger.log(`${response}`);
+        }
+      }
       return JSON.parse(response);
     } else {
       throw new Error('Invalid token');

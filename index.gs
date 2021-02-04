@@ -1,11 +1,18 @@
 var _ = Underscore.load();
+var options_;
 
 /**
  * Create an Tinkoff API Client 
  * @param {String} token API Token
+ * @param {Object} options Settings
  * @return {TinkoffApp} return an Tinkoff API Client 
  */
-function auth(token) {
+function auth(token, options) {
+  if (options != null) {
+    options_ = options;
+  } else {
+    options_ = {};
+  }
   return new TinkoffApp(token);
 }
 
