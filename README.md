@@ -27,7 +27,7 @@ function myFunction() {
   const token =  '1234567890'; // укажите здесь свой токен
 
   // Создаём API
-  var tAPI = TinkoffApp.auth(token); 
+  var tAPI = TinkoffApp.auth(token, {logging: true}); // Опционально - показывать в логах запросы и ответы
  
   // Используем API
   var my_balance = tAPI.portfolioCurrencies(); // например, получаем валютные активы
