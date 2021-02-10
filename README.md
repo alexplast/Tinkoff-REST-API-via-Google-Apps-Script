@@ -18,7 +18,7 @@ TinkoffApp
 function myFunction() {
 
   // Создаём API
-  var tAPI = TinkoffApp.auth({  
+  var tAPI = new TinkoffApp({
     token: '1234567890', // укажите здесь свой токен
     logging: true, // Опционально - показывать в логах запросы и ответы
     mode: 'sandbox' // Опционально - для работы с песочницей
