@@ -2,14 +2,16 @@ function tinkoffApi_(obj, token) {
   if (!!obj) {
     if (!!token) {
       Utilities.sleep(1500);
-
-      const marketApiUrl = 'https://api-invest.tinkoff.ru/openapi/', // Production
-        sandboxApiUrl = 'https://api-invest.tinkoff.ru/openapi/sandbox/'; // Sandbox
+      var apiMode = '';
+      if (options_.mode == 'sandbox') {
+        apiMode = 'sandbox/'
+      }
       var get_params = '';
       if (!!obj.parametres) {
         get_params = '?' + http_build_query(obj.parametres);
       }
-      var fullUrl = `${marketApiUrl}${obj.path}${get_params}`,
+      const apiUrl = `https://api-invest.tinkoff.ru/openapi/${apiMode}`;
+      var fullUrl = `${apiUrl}${obj.path}${get_params}`,
         auth_str = 'Bearer ' + token,
         options = {
           "muteHttpExceptions": true,
@@ -25,11 +27,13 @@ function tinkoffApi_(obj, token) {
       var response = UrlFetchApp.fetch(fullUrl, options);
       if (!!options_.logging) {
         if (options_.logging == true) {
-          Logger.log('Request:');
-          Logger.log(`url -> ${fullUrl}`);
-          Logger.log(`data -> ${JSON.stringify(options)}`);
-          Logger.log('Response:');
-          Logger.log(`${response}`);
+          Logger.log('Request URL:\n' +
+            `${fullUrl}\n\n` +
+            'Request DATA:\n' +
+            `${JSON.stringify(options)}\n\n` +
+            'Response DATA:\n' +
+            `${response}`
+          );
         }
       }
       return JSON.parse(response);

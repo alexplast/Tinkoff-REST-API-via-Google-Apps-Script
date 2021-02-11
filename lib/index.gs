@@ -7,13 +7,13 @@ var options_;
  * @param {Object} options Settings
  * @return {TinkoffApp} return an Tinkoff API Client 
  */
-function auth(token, options) {
-  if (options != null) {
-    options_ = options;
+function auth(obj) {
+  if (obj != null) {
+    options_ = obj;
   } else {
     options_ = {};
   }
-  return new TinkoffApp(token);
+  return new TinkoffApp(obj.token);
 }
 
 /**
@@ -226,8 +226,8 @@ var _this_ = this,
 
     TinkoffApp.name = 'TinkoffApp';
 
-    function TinkoffApp(token) {
-      this.token = token;
+    function TinkoffApp(obj) {
+      this.token = obj.token;
 
       // sandbox
       _this_.sandboxRegister = __bind_(_this_.sandboxRegister, this);
