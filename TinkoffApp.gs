@@ -3,269 +3,431 @@ class TinkoffApp {
     this.token = obj.token;
     this.mode = obj.mode;
     this.logging = obj.logging;
-    this.connect = function api(obj, token, mode, logging) {
+    this.accountId = obj.accountId;
+    this.connect = function api(obj) {
       if (obj != null) {
-        if (token != null) {
-          Utilities.sleep(1500);
-          var apiMode = '';
-          if (mode == 'sandbox') {
-            apiMode = 'sandbox/'
+        if (this.token != null) {
+          var apiMode = "";
+          if (this.mode == "sandbox" && obj.sandbox) {
+            obj.path = obj.path.replace(
+              /.+\/([A-Z][a-z]+)(.+)/,
+              "SandboxService/$1Sandbox$2"
+            );
           }
-          var get_params = '';
-          if (!!obj.parametres) {
-            get_params = '?' + http_build_query(obj.parametres);
+          const apiUrl = `https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.`;
+          if (obj.data.accountId == 1) {
+            obj.data.accountId = this.accountId;
           }
-          const apiUrl = `https://api-invest.tinkoff.ru/openapi/${apiMode}`;
-          var fullUrl = `${apiUrl}${obj.path}${get_params}`,
-            auth_str = 'Bearer ' + token,
+          var fullUrl = `${apiUrl}${obj.path}`,
             options = {
-              "muteHttpExceptions": true,
-              "headers": {
-                "Authorization": auth_str,
+              muteHttpExceptions: true,
+              headers: {
+                Authorization: "Bearer " + this.token,
               },
-              "method": obj.method,
-              "contentType": "application/json; charset=utf-8",
+              method: "POST",
+              contentType: "application/json",
+              payload: JSON.stringify(obj.data),
             };
-          if (obj.data) {
-            options.payload = JSON.stringify(obj.data);
-          }
           var response = UrlFetchApp.fetch(fullUrl, options);
-          if (logging == true) {
-            Logger.log('Request URL:\n' +
-              `${fullUrl}\n\n` +
-              'Request DATA:\n' +
-              `${JSON.stringify(options)}\n\n` +
-              'Response DATA:\n' +
-              `${response}`
+          if (this.logging == true) {
+            Logger.log(
+              "Request URL:\n" +
+                `${fullUrl}\n\n` +
+                "Request DATA:\n" +
+                `${JSON.stringify(options, null, 4)}\n\n` +
+                "Response DATA:\n" +
+                `${response}\n` +
+                "Response headers:\n" +
+                `${JSON.stringify(response.getAllHeaders(), null, 4)}`
             );
           }
           return JSON.parse(response);
         } else {
-          throw new Error('Invalid token');
+          throw new Error("Invalid token");
         }
       } else {
-        throw new Error('Invalid data');
+        throw new Error("Invalid data");
       }
-      function http_build_query(formdata, numeric_prefix, arg_separator) { // Generate URL-encoded query string
-        var key,
-          use_val,
-          use_key,
-          i = 0,
-          tmp_arr = [];
-        if (!arg_separator) {
-          arg_separator = '&';
-        }
-        for (key in formdata) {
-          use_key = escape(key);
-          use_val = escape((formdata[key].toString()));
-          use_val = use_val.replace(/%20/g, '+');
-          if (numeric_prefix && !isNaN(key)) {
-            use_key = numeric_prefix + i;
-          }
-          tmp_arr[i] = use_key + '=' + use_val;
-          i++;
-        }
-        return tmp_arr.join(arg_separator).replace(/\+/gm, '%2B');
-      }
-    }
+    };
   }
-  SandboxRegister() {
+  InstrumentsBondBy(idType, classCode, id) {
     return this.connect({
       data: {
-        brokerAccountType: "Tinkoff"
+        idType: idType,
+        classCode: classCode,
+        id: id,
       },
-      method: 'POST',
-      path: 'sandbox/register'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/BondBy",
+    });
   }
-  SandboxCurrenciesBalance(request, brokerAccountId) {
+  InstrumentsBonds(instrumentStatus) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
+      data: {
+        instrumentStatus: instrumentStatus,
       },
-      data: request,
-      method: 'POST',
-      path: 'sandbox/currencies/balance'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/Bonds",
+    });
   }
-  SandboxPositionsBalance(request, brokerAccountId) {
+  InstrumentsCurrencies(instrumentStatus) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
+      data: {
+        instrumentStatus: instrumentStatus,
       },
-      data: request,
-      method: 'POST',
-      path: 'sandbox/positions/balance'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/Currencies",
+    });
   }
-  SandboxRemove(brokerAccountId) {
+  InstrumentsCurrencyBy(idType, classCode, id) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
+      data: {
+        idType: idType,
+        classCode: classCode,
+        id: id,
       },
-      method: 'POST',
-      path: 'sandbox/remove'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/CurrencyBy",
+    });
   }
-  SandboxClear(brokerAccountId) {
+  InstrumentsEtfBy(idType, classCode, id) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
+      data: {
+        idType: idType,
+        classCode: classCode,
+        id: id,
       },
-      method: 'POST',
-      path: 'sandbox/clear'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/EtfBy",
+    });
   }
-  Orders(brokerAccountId) {
+  InstrumentsEtfs() {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
+      data: {
+        instrumentStatus: instrumentStatus,
       },
-      method: 'GET',
-      path: 'orders'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/Etfs",
+    });
   }
-  OrdersLimitOrder(request, figi, brokerAccountId) {
+  InstrumentsFutureBy(idType, classCode, id) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId,
-        figi: figi
+      data: {
+        idType: idType,
+        classCode: classCode,
+        id: id,
       },
-      data: request,
-      method: 'POST',
-      path: 'orders/limit-order'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/FutureBy",
+    });
   }
-  OrdersMarketOrder(request, figi, brokerAccountId) {
+  InstrumentsFutures(instrumentStatus) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId,
-        figi: figi
+      data: {
+        instrumentStatus: instrumentStatus,
       },
-      data: request,
-      method: 'POST',
-      path: 'orders/market-order'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/Futures",
+    });
   }
-  OrdersCancel(orderId, brokerAccountId) {
+  InstrumentsGetAccruedInterests(figi, from, to) {
     return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId,
-        orderId: orderId
-      },
-      method: 'POST',
-      path: 'orders/cancel'
-    }, this.token, this.mode, this.logging);
-  }
-  Portfolio(brokerAccountId) {
-    return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
-      },
-      method: 'GET',
-      path: 'portfolio'
-    }, this.token, this.mode, this.logging);
-  }
-  PortfolioCurrencies(brokerAccountId) {
-    return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId
-      },
-      method: 'GET',
-      path: 'portfolio/currencies'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketSearchByFIGI(figi) {
-    return this.connect({
-      parametres: {
-        figi: figi
-      },
-      method: 'GET',
-      path: 'market/search/by-figi'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketSearchByTicker(ticker) {
-    return this.connect({
-      parametres: {
-        ticker: ticker
-      },
-      method: 'GET',
-      path: 'market/search/by-ticker'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketStocks() {
-    return this.connect({
-      method: 'GET',
-      path: 'market/stocks'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketBonds() {
-    return this.connect({
-      method: 'GET',
-      path: 'market/bonds'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketETFs() {
-    return this.connect({
-      method: 'GET',
-      path: 'market/etfs'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketCurrencies() {
-    return this.connect({
-      method: 'GET',
-      path: 'market/currencies'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketOrderbook(figi, depth) {
-    return this.connect({
-      parametres: {
-        figi: figi,
-        depth: depth,
-      },
-      method: 'GET',
-      path: 'market/orderbook'
-    }, this.token, this.mode, this.logging);
-  }
-  MarketCandles(figi, from, to, interval) {
-    return this.connect({
-      parametres: {
-        figi: figi,
-        from: from, // 2019-08-19T18:38:33.131642+03:00
-        to: to, // 2019-08-19T18:38:33.131642+03:00
-        interval: interval, // Available values : 1min, 2min, 3min, 5min, 10min, 15min, 30min, hour, day, week, month
-      },
-      method: 'GET',
-      path: 'market/candles'
-    }, this.token, this.mode, this.logging);
-  }
-  Operations(from, to, figi, brokerAccountId) {
-    return this.connect({
-      parametres: {
-        brokerAccountId: brokerAccountId,
+      data: {
         figi: figi,
         from: from,
-        to: to
+        to: to,
       },
-      method: 'GET',
-      path: 'operations'
-    }, this.token, this.mode, this.logging);
+      path: "InstrumentsService/GetAccruedInterests",
+    });
   }
-  UserAccounts() {
+  InstrumentsGetDividends(figi, from, to) {
     return this.connect({
-      method: 'GET',
-      path: 'user/accounts'
-    }, this.token, this.mode, this.logging);
+      data: {
+        figi: figi,
+        from: from,
+        to: to,
+      },
+      path: "InstrumentsService/GetDividends",
+    });
   }
-};
+  InstrumentsGetFuturesMargin(figi) {
+    return this.connect({
+      data: {
+        figi: figi,
+      },
+      path: "InstrumentsService/GetFuturesMargin",
+    });
+  }
+  InstrumentsGetInstrumentBy(idType, classCode, id) {
+    return this.connect({
+      data: {
+        idType: idType,
+        classCode: classCode,
+        id: id,
+      },
+      path: "InstrumentsService/GetInstrumentBy",
+    });
+  }
+  InstrumentsShareBy(idType, classCode, id) {
+    return this.connect({
+      data: {
+        idType: idType,
+        classCode: classCode,
+        id: id,
+      },
+      path: "InstrumentsService/ShareBy",
+    });
+  }
+  InstrumentsShares(instrumentStatus) {
+    return this.connect({
+      data: {
+        instrumentStatus: instrumentStatus,
+      },
+      path: "InstrumentsService/Shares",
+    });
+  }
+  InstrumentsTradingSchedules(exchange, from, to) {
+    return this.connect({
+      data: {
+        exchange: exchange,
+        from: from,
+        to: to,
+      },
+      path: "InstrumentsService/TradingSchedules",
+    });
+  }
 
+  MarketDataGetCandles(figi, from, to, interval) {
+    return this.connect({
+      data: {
+        figi,
+        from,
+        to,
+        interval,
+      },
+      path: "MarketDataService/GetCandles",
+    });
+  }
+  MarketDataGetLastPrices(figi) {
+    return this.connect({
+      data: {
+        figi,
+      },
+      path: "MarketDataService/GetLastPrices",
+    });
+  }
+  MarketDataGetOrderBook(figi, depth) {
+    return this.connect({
+      data: {
+        figi,
+        depth,
+      },
+      path: "MarketDataService/GetOrderBook",
+    });
+  }
+  MarketDataGetTradingStatus(figi) {
+    return this.connect({
+      data: {
+        figi,
+      },
+      path: "MarketDataService/GetTradingStatus",
+    });
+  }
 
+  OperationsGetOperations(accountId = 1, from, to, state, figi) {
+    return this.connect({
+      data: {
+        accountId,
+        from,
+        to,
+        state,
+        figi,
+      },
+      path: "OperationsService/GetOperations",
+      sandbox: true,
+    });
+  }
+  OperationsGetPortfolio(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "OperationsService/GetPortfolio",
+      sandbox: true,
+    });
+  }
+  OperationsGetPositions(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "OperationsService/GetPositions",
+      sandbox: true,
+    });
+  }
+  OperationsGetWithdrawLimits(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "OperationsService/GetWithdrawLimits",
+    });
+  }
 
+  OrdersCancelOrder(accountId = 1, orderId) {
+    return this.connect({
+      data: {
+        accountId,
+        orderId,
+      },
+      path: "OrdersService/CancelOrder",
+      sandbox: true,
+    });
+  }
+  OrdersGetOrderState(accountId = 1, orderId) {
+    return this.connect({
+      data: {
+        accountId,
+        orderId,
+      },
+      path: "OrdersService/GetOrderState",
+      sandbox: true,
+    });
+  }
+  OrdersGetOrders(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "OrdersService/GetOrders",
+      sandbox: true,
+    });
+  }
+  OrdersPostOrder(
+    figi,
+    quantity,
+    price_units,
+    direction,
+    accountId = 1,
+    orderType,
+    orderId
+  ) {
+    return this.connect({
+      data: {
+        figi,
+        quantity,
+        price: {
+          nano: 6,
+          units: price_units,
+        },
+        direction,
+        accountId,
+        orderType,
+        orderId,
+      },
+      path: "OrdersService/PostOrder",
+      sandbox: true,
+    });
+  }
 
+  SandboxCloseSandboxAccount(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "SandboxService/CloseSandboxAccount",
+    });
+  }
 
+  SandboxOpenSandboxAccount() {
+    return this.connect({
+      data: {},
+      path: "SandboxService/OpenSandboxAccount",
+    });
+  }
 
+  SandboxSandboxPayIn(accountId = 1, currency, units) {
+    return this.connect({
+      data: {
+        accountId,
+        amount: {
+          nano: 5,
+          currency,
+          units,
+        },
+      },
+      path: "SandboxService/SandboxPayIn",
+    });
+  }
 
+  StopOrdersCancelStopOrder(accountId = 1, stopOrderId) {
+    return this.connect({
+      data: {
+        accountId,
+        stopOrderId,
+      },
+      path: "StopOrdersService/CancelStopOrder",
+    });
+  }
+  StopOrdersGetStopOrders(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "StopOrdersService/GetStopOrders",
+    });
+  }
+  StopOrdersPostStopOrder(
+    figi,
+    quantity,
+    price_units,
+    stopPrice_units,
+    direction,
+    accountId = 1,
+    expirationType,
+    stopOrderType,
+    expireDate
+  ) {
+    return this.connect({
+      data: {
+        figi,
+        quantity,
+        price: {
+          nano: 6,
+          units: price_units,
+        },
+        stopPrice: {
+          nano: 6,
+          units: stopPrice_units,
+        },
+        direction,
+        accountId,
+        expirationType,
+        stopOrderType,
+        expireDate,
+      },
+      path: "StopOrdersService/PostStopOrder",
+    });
+  }
 
+  UsersGetAccounts() {
+    return this.connect({
+      data: {},
+      path: "UsersService/GetAccounts",
 
-
-
+      sandbox: true,
+    });
+  }
+  UsersGetInfo() {
+    return this.connect({
+      data: {},
+      path: "UsersService/GetInfo",
+    });
+  }
+  UsersGetMarginAttributes(accountId = 1) {
+    return this.connect({
+      data: {
+        accountId,
+      },
+      path: "UsersService/GetMarginAttributes",
+    });
+  }
+  UsersGetUserTariff() {
+    return this.connect({
+      data: {},
+      path: "UsersService/GetUserTariff",
+    });
+  }
+}
