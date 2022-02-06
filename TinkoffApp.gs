@@ -203,7 +203,7 @@ class TinkoffApp {
   MarketDataGetLastPrices(figi) {
     return this.connect({
       data: {
-        figi,
+        figi: [figi],
       },
       path: "MarketDataService/GetLastPrices",
     });
