@@ -96,7 +96,7 @@ class TinkoffApp {
       path: "InstrumentsService/EtfBy",
     });
   }
-  InstrumentsEtfs() {
+  InstrumentsEtfs(instrumentStatus) {
     return this.connect({
       data: {
         instrumentStatus: instrumentStatus,
